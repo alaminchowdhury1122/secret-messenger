@@ -3,16 +3,111 @@
 <head>
     <title>SecretMessenger</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 0; background: #f0f0f0; }
-        #login { text-align: center; margin-top: 100px; }
-        #chat-container { display: none; height: 100vh; flex-direction: column; }
-        #chat { flex: 1; overflow-y: auto; padding: 10px; background: #fff; }
-        #input-area { display: flex; padding: 10px; background: #ddd; }
-        #input { flex: 1; padding: 5px; }
-        #send { padding: 5px 10px; }
-        .message { margin: 5px; padding: 8px; border-radius: 5px; }
-        .me { background: #007bff; color: white; text-align: right; }
-        .other { background: #e0e0e0; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        #login {
+            text-align: center;
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        #login input {
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+            max-width: 300px;
+        }
+        #login button {
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        #chat-container {
+            display: none;
+            flex-direction: column;
+            height: 100vh;
+        }
+        #chat {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+            background: #fff;
+        }
+        #input-area {
+            display: flex;
+            padding: 10px;
+            background: #ddd;
+            position: sticky;
+            bottom: 0;
+        }
+        #input {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+        }
+        #send {
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+        .message {
+            margin: 10px;
+            padding: 10px;
+            border-radius: 10px;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+        .me {
+            background: #007bff;
+            color: white;
+            margin-left: auto;
+        }
+        .other {
+            background: #e0e0e0;
+            margin-right: auto;
+        }
+
+        /* Mobile Responsive Styles */
+        @media (max-width: 600px) {
+            #login input {
+                max-width: 100%;
+            }
+            #chat {
+                padding: 5px;
+            }
+            .message {
+                max-width: 90%;
+                font-size: 14px;
+            }
+            #input-area {
+                padding: 5px;
+            }
+            #input {
+                padding: 8px;
+            }
+            #send {
+                padding: 8px 15px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -33,7 +128,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script>
         const socket = io();
-        const secretKey = "LoveKey123"; // Encryption key
+        const secretKey = "LoveKey123";
         let myUsername;
 
         function login() {
