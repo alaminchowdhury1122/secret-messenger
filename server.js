@@ -12,10 +12,15 @@ const file = 'db.json';
 const adapter = new JSONFile(file);
 const db = new Low(adapter);
 
-// Initialize database
+// Initialize database with default structure
 async function initDb() {
     await db.read();
-    db.data ||= { messages: [] };
+    // Explicitly set default data if it doesn't exist
+    if (!db.data) {
+        db.data = { messages: [] };
+    } else if (!db.data.messages) {
+        db.data.messages = [];
+    }
     await db.write();
 }
 initDb();
@@ -34,9 +39,9 @@ io.on('connection', (socket) => {
                 socket.username = username;
                 socket.emit('login_success', username);
 
-                // Send chat history
+                // Send chat history to the user
                 await db.read();
-                const messages = db.data.messages;
+                const messages = db.data.messages || [];
                 socket.emit('chat_history', messages);
             } else {
                 socket.emit('login_fail', 'Already logged in!');
@@ -48,10 +53,12 @@ io.on('connection', (socket) => {
 
     socket.on('chat message', async (data) => {
         if (socket.username) {
+            // Store message in database
             await db.read();
             db.data.messages.push({ user: socket.username, msg: data.msg });
             await db.write();
 
+            // Broadcast message to all users
             io.emit('chat message', { user: socket.username, msg: data.msg });
         }
     });
