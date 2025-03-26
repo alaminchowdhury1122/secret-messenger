@@ -2,48 +2,54 @@
 <html>
 <head>
     <title>SecretMessenger</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        body {
+        html, body {
+            height: 100%;
+            width: 100%;
+            overflow: hidden; /* Prevent body scroll */
             font-family: Arial, sans-serif;
             background: #f0f0f0;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
         }
         #login {
-            text-align: center;
-            padding: 20px;
-            flex: 1;
+            height: 100%;
+            width: 100%;
             display: flex;
             flex-direction: column;
             justify-content: center;
+            align-items: center;
+            padding: 20px;
         }
         #login input {
             margin: 10px 0;
             padding: 10px;
             width: 100%;
             max-width: 300px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
         }
         #login button {
             padding: 10px 20px;
             background: #007bff;
             color: white;
             border: none;
+            border-radius: 5px;
             cursor: pointer;
         }
         #chat-container {
             display: none;
             flex-direction: column;
-            height: 100vh;
+            height: 100%;
+            width: 100%;
         }
         #chat {
             flex: 1;
-            overflow-y: auto;
+            overflow-y: auto; /* Only chat area scrolls */
             padding: 10px;
             background: #fff;
         }
@@ -51,8 +57,7 @@
             display: flex;
             padding: 10px;
             background: #ddd;
-            position: sticky;
-            bottom: 0;
+            width: 100%;
         }
         #input {
             flex: 1;
@@ -88,6 +93,9 @@
 
         /* Mobile Responsive Styles */
         @media (max-width: 600px) {
+            #login {
+                padding: 10px;
+            }
             #login input {
                 max-width: 100%;
             }
@@ -95,7 +103,7 @@
                 padding: 5px;
             }
             .message {
-                max-width: 90%;
+                max-width: 85%;
                 font-size: 14px;
             }
             #input-area {
@@ -112,8 +120,8 @@
 </head>
 <body>
     <div id="login">
-        <input id="username" placeholder="Username" type="text"><br><br>
-        <input id="password" placeholder="Password" type="password"><br><br>
+        <input id="username" placeholder="Username" type="text">
+        <input id="password" placeholder="Password" type="password">
         <button onclick="login()">Login</button>
         <p id="error" style="color: red;"></p>
     </div>
