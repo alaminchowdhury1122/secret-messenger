@@ -2,26 +2,26 @@ const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const { Low } = require('lowdb');
-const { JSONFile } = require('lowdb/node'); // For Node.js environment
+const { JSONFile } = require('lowdb/node');
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
 // Setup lowdb
-const file = 'db.json'; // Database file
+const file = 'db.json';
 const adapter = new JSONFile(file);
 const db = new Low(adapter);
 
-// Initialize database with default structure
+// Initialize database
 async function initDb() {
     await db.read();
-    db.data ||= { messages: [] }; // If no data, initialize with empty messages array
+    db.data ||= { messages: [] };
     await db.write();
 }
 initDb();
 
 // Hardcoded users
-const users = { "Bro": "pass123", "GF": "love456" };
+const users = { "Al Amin Chowdhury": "pass123", "Mrs. Chowdhury": "love456" };
 let connectedUsers = [];
 
 app.get('/', (req, res) => res.sendFile(__dirname + '/index.html'));
@@ -34,7 +34,7 @@ io.on('connection', (socket) => {
                 socket.username = username;
                 socket.emit('login_success', username);
 
-                // Send chat history to the user
+                // Send chat history
                 await db.read();
                 const messages = db.data.messages;
                 socket.emit('chat_history', messages);
@@ -48,12 +48,10 @@ io.on('connection', (socket) => {
 
     socket.on('chat message', async (data) => {
         if (socket.username) {
-            // Store message in database
             await db.read();
             db.data.messages.push({ user: socket.username, msg: data.msg });
             await db.write();
 
-            // Broadcast message to all users
             io.emit('chat message', { user: socket.username, msg: data.msg });
         }
     });
